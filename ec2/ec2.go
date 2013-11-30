@@ -603,6 +603,70 @@ func (ec2 *EC2) Volumes(volIds []string, filter *Filter) (resp *VolumesResp, err
 }
 
 // ----------------------------------------------------------------------------
+// ElasticIp management (for VPC)
+
+// The AllocateAddress request parameters
+//
+// see http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-AllocateAddress.html
+type AllocateAddress struct {
+	Domain     string
+}
+
+// Response to an AllocateAddress request
+type AllocateAddressResp struct {
+	RequestId    string `xml:"requestId"`
+	PublicIp     string `xml:"publicIp"`
+	Domain       string `xml:"domain"`
+	AllocationId string `xml:"allocationId"`
+}
+
+// The AssociateVpcAddress request parameters
+//
+// http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-AssociateAddress.html
+type AssociateVpcAddress struct {
+    InstanceId          string
+    AllocationId        string
+    AllowReassociation  bool
+}
+
+// Response to an AssociateVpcAddress request
+type AssociateVpcAddressResp struct {
+    RequestId       string  `xml:"requestId"`
+    Return          bool    `xml:"return"`
+    AssociationId   string  `xml:"associationId"`
+}
+
+// Associate an address with a VPC instance.
+func (ec2 *EC2) AssociateVpcAddress(instanceId string, allocationId string, allowReassociation bool) (resp *AssociateVpcAddressResp, err error) {
+	params := makeParams("AssociateVpcAddress")
+	params["InstanceId"] = instanceId
+	params["AllocationId"] = allocationId
+    params["AllowReassociation"] = allowReassociation
+
+	resp = &AssociateVpcAddress{}
+	err = ec2.query(params, resp)
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}
+
+// Allocate a new Elastic IP.
+func (ec2 *EC2) AllocateAddress(options *AllocateAddress) (resp *AllocateAddressResp, err error) {
+	params := makeParams("AllocateAddress")
+	params["Domain"] = options.Domain
+
+	resp = &AllocateAddressResp{}
+	err = ec2.query(params, resp)
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}
+
+// ----------------------------------------------------------------------------
 // Image and snapshot management functions and types.
 
 // The CreateImage request parameters.
