@@ -637,13 +637,15 @@ type AssociateVpcAddressResp struct {
 }
 
 // Associate an address with a VPC instance.
-func (ec2 *EC2) AssociateVpcAddress(instanceId string, allocationId string, allowReassociation bool) (resp *AssociateVpcAddressResp, err error) {
+func (ec2 *EC2) AssociateVpcAddress(options *AssociateVpcAddress) (resp *AssociateVpcAddressResp, err error) {
 	params := makeParams("AssociateVpcAddress")
-	params["InstanceId"] = instanceId
-	params["AllocationId"] = allocationId
-    params["AllowReassociation"] = allowReassociation
+	params["InstanceId"] = options.InstanceId
+	params["AllocationId"] = options.AllocationId
+    if options.AllowReassociation {
+        params["AllowReassociation"] = "true"
+    }
 
-	resp = &AssociateVpcAddress{}
+	resp = &AssociateVpcAddressResp{}
 	err = ec2.query(params, resp)
 	if err != nil {
 		return nil, err
