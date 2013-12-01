@@ -834,7 +834,7 @@ func (s *S) TestAllocateAddressExample(c *C) {
 	testServer.Response(200, nil, CreateImageExample)
 
 	options := &ec2.AllocateAddress{
-        Domain: "vpc",
+		Domain: "vpc",
 	}
 
 	resp, err := s.ec2.AllocateAddress(options)
@@ -845,7 +845,7 @@ func (s *S) TestAllocateAddressExample(c *C) {
 
 	c.Assert(err, IsNil)
 	c.Assert(resp.RequestId, Equals, "59dbff89-35bd-4eac-99ed-be587EXAMPLE")
-    c.Assert(resp.PublicIp, Equals, "198.51.100.1")
+	c.Assert(resp.PublicIp, Equals, "198.51.100.1")
 	c.Assert(resp.Domain, Equals, "vpc")
 	c.Assert(resp.AllocationId, Equals, "eipalloc-5723d13e")
 }
