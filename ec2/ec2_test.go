@@ -834,7 +834,7 @@ func (s *S) TestAllocateAddressExample(c *C) {
 	testServer.Response(200, nil, CreateImageExample)
 
 	options := &ec2.AllocateAddress{
-        Domain: "vpc"
+        Domain: "vpc",
 	}
 
 	resp, err := s.ec2.AllocateAddress(options)

@@ -636,6 +636,34 @@ type AssociateAddressResp struct {
 	AssociationId string `xml:"associationId"`
 }
 
+// Allocate a new Elastic IP.
+func (ec2 *EC2) AllocateAddress(options *AllocateAddress) (resp *AllocateAddressResp, err error) {
+	params := makeParams("AllocateAddress")
+	params["Domain"] = options.Domain
+
+	resp = &AllocateAddressResp{}
+	err = ec2.query(params, resp)
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}
+
+// Release an Elastic IP (VPC).
+func (ec2 *EC2) ReleaseAddress(id string) (resp *SimpleResp, err error) {
+	params := makeParams("ReleaseAddress")
+	params["AllocationId"] = id
+
+	resp = &SimpleResp{}
+	err = ec2.query(params, resp)
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}
+
 // Associate an address with a VPC instance.
 func (ec2 *EC2) AssociateAddress(options *AssociateAddress) (resp *AssociateAddressResp, err error) {
 	params := makeParams("AssociateAddress")
@@ -654,12 +682,12 @@ func (ec2 *EC2) AssociateAddress(options *AssociateAddress) (resp *AssociateAddr
 	return
 }
 
-// Allocate a new Elastic IP.
-func (ec2 *EC2) AllocateAddress(options *AllocateAddress) (resp *AllocateAddressResp, err error) {
-	params := makeParams("AllocateAddress")
-	params["Domain"] = options.Domain
+// Disassociate an address from a VPC instance.
+func (ec2 *EC2) DisassociateAddress(id string) (resp *SimpleResp, err error) {
+	params := makeParams("DisassociateAddress")
+	params["AssociationId"] = id
 
-	resp = &AllocateAddressResp{}
+	resp = &SimpleResp{}
 	err = ec2.query(params, resp)
 	if err != nil {
 		return nil, err
