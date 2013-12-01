@@ -609,7 +609,7 @@ func (ec2 *EC2) Volumes(volIds []string, filter *Filter) (resp *VolumesResp, err
 //
 // see http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-AllocateAddress.html
 type AllocateAddress struct {
-	Domain     string
+	Domain string
 }
 
 // Response to an AllocateAddress request
@@ -624,16 +624,16 @@ type AllocateAddressResp struct {
 //
 // http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-AssociateAddress.html
 type AssociateAddress struct {
-    InstanceId          string
-    AllocationId        string
-    AllowReassociation  bool
+	InstanceId         string
+	AllocationId       string
+	AllowReassociation bool
 }
 
 // Response to an AssociateAddress request
 type AssociateAddressResp struct {
-    RequestId       string  `xml:"requestId"`
-    Return          bool    `xml:"return"`
-    AssociationId   string  `xml:"associationId"`
+	RequestId     string `xml:"requestId"`
+	Return        bool   `xml:"return"`
+	AssociationId string `xml:"associationId"`
 }
 
 // Associate an address with a VPC instance.
@@ -641,9 +641,9 @@ func (ec2 *EC2) AssociateAddress(options *AssociateAddress) (resp *AssociateAddr
 	params := makeParams("AssociateAddress")
 	params["InstanceId"] = options.InstanceId
 	params["AllocationId"] = options.AllocationId
-    if options.AllowReassociation {
-        params["AllowReassociation"] = "true"
-    }
+	if options.AllowReassociation {
+		params["AllowReassociation"] = "true"
+	}
 
 	resp = &AssociateAddressResp{}
 	err = ec2.query(params, resp)
