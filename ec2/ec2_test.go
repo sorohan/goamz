@@ -829,3 +829,23 @@ func (s *S) TestSignatureWithEndpointPath(c *C) {
 	req := testServer.WaitRequest()
 	c.Assert(req.Form["Signature"], DeepEquals, []string{"klxs+VwDa1EKHBsxlDYYN58wbP6An+RVdhETv1Fm/os="})
 }
+
+func (s *S) TestAllocateAddressExample(c *C) {
+	testServer.Response(200, nil, CreateImageExample)
+
+	options := &ec2.AllocateAddress{
+        Domain: "vpc"
+	}
+
+	resp, err := s.ec2.AllocateAddress(options)
+
+	req := testServer.WaitRequest()
+	c.Assert(req.Form["Action"], DeepEquals, []string{"AllocateAddress"})
+	c.Assert(req.Form["Domain"], DeepEquals, []string{"vpc"})
+
+	c.Assert(err, IsNil)
+	c.Assert(resp.RequestId, Equals, "59dbff89-35bd-4eac-99ed-be587EXAMPLE")
+    c.Assert(resp.PublicIp, Equals, "198.51.100.1")
+	c.Assert(resp.Domain, Equals, "vpc")
+	c.Assert(resp.AllocationId, Equals, "eipalloc-5723d13e")
+}

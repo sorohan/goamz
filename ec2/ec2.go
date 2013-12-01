@@ -620,32 +620,32 @@ type AllocateAddressResp struct {
 	AllocationId string `xml:"allocationId"`
 }
 
-// The AssociateVpcAddress request parameters
+// The AssociateAddress request parameters
 //
 // http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-AssociateAddress.html
-type AssociateVpcAddress struct {
+type AssociateAddress struct {
     InstanceId          string
     AllocationId        string
     AllowReassociation  bool
 }
 
-// Response to an AssociateVpcAddress request
-type AssociateVpcAddressResp struct {
+// Response to an AssociateAddress request
+type AssociateAddressResp struct {
     RequestId       string  `xml:"requestId"`
     Return          bool    `xml:"return"`
     AssociationId   string  `xml:"associationId"`
 }
 
 // Associate an address with a VPC instance.
-func (ec2 *EC2) AssociateVpcAddress(options *AssociateVpcAddress) (resp *AssociateVpcAddressResp, err error) {
-	params := makeParams("AssociateVpcAddress")
+func (ec2 *EC2) AssociateAddress(options *AssociateAddress) (resp *AssociateAddressResp, err error) {
+	params := makeParams("AssociateAddress")
 	params["InstanceId"] = options.InstanceId
 	params["AllocationId"] = options.AllocationId
     if options.AllowReassociation {
         params["AllowReassociation"] = "true"
     }
 
-	resp = &AssociateVpcAddressResp{}
+	resp = &AssociateAddressResp{}
 	err = ec2.query(params, resp)
 	if err != nil {
 		return nil, err
